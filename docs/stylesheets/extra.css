@@ -1,0 +1,189 @@
+/* ==========================================================================
+   KLIPSLICE wiki theme
+   ==========================================================================
+   Maps the KLIPSLICE design tokens (source repo: docs/design/tokens.css)
+   onto MkDocs Material's CSS variables.
+
+   - Dark ("slate") is the primary scheme and uses the token values 1:1:
+     carbon surfaces, aluminium ink, signal-path (#4db9ff) as accent.
+   - The light ("default") scheme exists for readability in bright rooms and
+     on print. The app itself has no light theme, so its values are derived:
+     white ground, carbon ink, and a darkened signal-path (#0b6aa3, 5.8:1 on
+     white) because #4db9ff only reaches 2.2:1 on white.
+   - --ksd-* variables drive the inline SVG diagrams in assets/diagrams/.
+   ========================================================================== */
+
+:root {
+  /* Token primitives (copied from tokens.css, not referenced across repos). */
+  --ks-carbon-950: #07090b;
+  --ks-carbon-900: #0b0e11;
+  --ks-carbon-850: #0f1317;
+  --ks-carbon-800: #141a1f;
+  --ks-carbon-750: #1a2127;
+  --ks-carbon-700: #222a31;
+  --ks-steel-600: #2e3840;
+  --ks-steel-500: #3d4953;
+  --ks-steel-400: #5c6b77;
+  --ks-alu-300: #8b99a4;
+  --ks-alu-200: #b4c0c9;
+  --ks-alu-100: #d8e0e6;
+  --ks-alu-50: #eef3f6;
+  --ks-line-subtle: #1c232a;
+  --ks-line: #262f37;
+  --ks-signal-path: #4db9ff;
+  --ks-signal-path-surface: #0f2433;
+  --ks-signal-path-light: #0b6aa3;
+
+  --ks-font-ui: "Inter", "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ks-font-data: "IBM Plex Mono", "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+
+  --md-text-font-family: var(--ks-font-ui);
+  --md-code-font-family: var(--ks-font-data);
+}
+
+/* -- Dark scheme ---------------------------------------------------------- */
+[data-md-color-scheme="slate"] {
+  --md-hue: 207;
+  --md-default-bg-color: var(--ks-carbon-900);
+  --md-default-bg-color--light: var(--ks-carbon-850);
+  --md-default-bg-color--lighter: var(--ks-carbon-800);
+  --md-default-bg-color--lightest: var(--ks-carbon-700);
+  --md-default-fg-color: var(--ks-alu-100);
+  --md-default-fg-color--light: var(--ks-alu-200);
+  --md-default-fg-color--lighter: var(--ks-alu-300);
+  --md-default-fg-color--lightest: var(--ks-line);
+
+  --md-primary-fg-color: var(--ks-carbon-950);
+  --md-primary-fg-color--light: var(--ks-carbon-850);
+  --md-primary-fg-color--dark: var(--ks-carbon-950);
+  --md-primary-bg-color: var(--ks-alu-50);
+  --md-primary-bg-color--light: var(--ks-alu-200);
+
+  --md-accent-fg-color: var(--ks-signal-path);
+  --md-accent-fg-color--transparent: rgba(77, 185, 255, 0.12);
+  --md-accent-bg-color: var(--ks-carbon-950);
+
+  --md-typeset-color: var(--ks-alu-100);
+  --md-typeset-a-color: var(--ks-signal-path);
+  --md-typeset-table-color: var(--ks-line);
+  --md-typeset-table-color--light: var(--ks-carbon-800);
+
+  --md-code-bg-color: var(--ks-carbon-800);
+  --md-code-fg-color: var(--ks-alu-100);
+  --md-code-hl-color: var(--ks-signal-path);
+  --md-code-hl-color--light: rgba(77, 185, 255, 0.10);
+
+  --md-footer-bg-color: var(--ks-carbon-950);
+  --md-footer-bg-color--dark: var(--ks-carbon-950);
+  --md-footer-fg-color: var(--ks-alu-100);
+  --md-footer-fg-color--light: var(--ks-alu-200);
+  --md-footer-fg-color--lighter: var(--ks-alu-300);
+
+  --ksd-canvas: transparent;
+  --ksd-ink: var(--ks-alu-100);
+  --ksd-muted: var(--ks-alu-300);
+  --ksd-line: var(--ks-steel-400);
+  --ksd-box: var(--ks-carbon-850);
+  --ksd-box-strong: var(--ks-carbon-800);
+  --ksd-accent: var(--ks-signal-path);
+  --ksd-accent-fill: var(--ks-signal-path-surface);
+}
+
+/* -- Light scheme --------------------------------------------------------- */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #ffffff;
+  --md-default-fg-color: var(--ks-carbon-900);
+  --md-default-fg-color--light: var(--ks-steel-500);
+  --md-default-fg-color--lighter: var(--ks-steel-400);
+  --md-default-fg-color--lightest: #d3dbe1;
+
+  /* The header stays carbon in both schemes: one identity, two reading modes. */
+  --md-primary-fg-color: var(--ks-carbon-900);
+  --md-primary-fg-color--light: var(--ks-carbon-800);
+  --md-primary-fg-color--dark: var(--ks-carbon-950);
+  --md-primary-bg-color: var(--ks-alu-50);
+  --md-primary-bg-color--light: var(--ks-alu-200);
+
+  --md-accent-fg-color: var(--ks-signal-path-light);
+  --md-accent-fg-color--transparent: rgba(11, 106, 163, 0.10);
+  --md-accent-bg-color: #ffffff;
+
+  --md-typeset-color: var(--ks-carbon-900);
+  --md-typeset-a-color: var(--ks-signal-path-light);
+
+  --md-code-bg-color: #f1f4f6;
+  --md-code-fg-color: var(--ks-carbon-850);
+
+  --md-footer-bg-color: var(--ks-carbon-900);
+  --md-footer-bg-color--dark: var(--ks-carbon-950);
+
+  --ksd-canvas: transparent;
+  --ksd-ink: var(--ks-carbon-900);
+  --ksd-muted: var(--ks-steel-400);
+  --ksd-line: var(--ks-steel-400);
+  --ksd-box: #f6f8f9;
+  --ksd-box-strong: #eaeff2;
+  --ksd-accent: var(--ks-signal-path-light);
+  --ksd-accent-fill: #e3f1fb;
+}
+
+/* -- Shape: sharp edges, 2 px maximum radius (BRAND.md §1.1) -------------- */
+.md-typeset .admonition,
+.md-typeset details,
+.md-typeset pre > code,
+.md-typeset .highlight,
+.md-typeset .tabbed-set,
+.md-typeset table:not([class]),
+.md-search__form,
+.md-typeset code,
+.md-typeset kbd {
+  border-radius: 2px;
+}
+
+.md-typeset table:not([class]) {
+  font-size: 0.7rem;
+}
+
+/* Numbers never change width while they change value. */
+.md-typeset code,
+.md-typeset table:not([class]) td {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* Header: hairline separation instead of a shadow. */
+.md-header,
+.md-tabs {
+  box-shadow: none;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Wordmark in the header: caps with tracking, per logotype concept L1/L2. */
+.md-header__topic:first-child .md-ellipsis {
+  letter-spacing: 0.18em;
+  font-weight: 600;
+}
+
+/* -- Inline SVG diagrams -------------------------------------------------- */
+.ksd-figure {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.ksd-figure svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.ksd-figure figcaption {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.7rem;
+  margin-top: 0.6em;
+  max-width: none;
+}
+
+.md-typeset .ksd-fullsize {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  margin-top: -0.8em;
+}

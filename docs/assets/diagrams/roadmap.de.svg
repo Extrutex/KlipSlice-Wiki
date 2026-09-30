@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" width="720" height="560" role="img" aria-labelledby="ksd-road-title ksd-road-desc" class="ksd">
+  <title id="ksd-road-title">KLIPSLICE-Fahrplan</title>
+  <desc id="ksd-road-desc">Stufe 0, das Fundament, ist in Arbeit. Stufe 1 Maschinen-Sync, Stufe 2 Klipper-genaue Druckzeit und Stufe 3 natives adaptives Mesh und Purge sind geplant. Stufe 4 Regelkreis ist eine Vision ohne Entwurf.</desc>
+  <style>
+    .ksd-canvas{fill:var(--ksd-canvas,#0b0e11)}
+    .ksd-box{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-line,#5c6b77);stroke-width:1}
+    .ksd-box-accent{fill:var(--ksd-accent-fill,#0f2433);stroke:var(--ksd-accent,#4db9ff);stroke-width:1.5}
+    .ksd-box-planned{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-line,#5c6b77);stroke-width:1;stroke-dasharray:6 4}
+    .ksd-t{font-family:Inter,"IBM Plex Sans","Segoe UI",system-ui,sans-serif;fill:var(--ksd-ink,#d8e0e6)}
+    .ksd-h{font-size:16px;font-weight:600;letter-spacing:.03em}
+    .ksd-s{font-size:13px}
+    .ksd-tag{font-size:11.5px;font-weight:600;letter-spacing:.08em}
+    .ksd-mut{fill:var(--ksd-muted,#8b99a4)}
+    .ksd-acc{fill:var(--ksd-accent,#4db9ff)}
+    .ksd-num{font-family:"IBM Plex Mono","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:14px;font-weight:600}
+    .ksd-num-on{fill:var(--ksd-accent-fill,#0f2433)}
+    .ksd-track{stroke:var(--ksd-line,#5c6b77);stroke-width:2;fill:none}
+    .ksd-track-planned{stroke:var(--ksd-line,#5c6b77);stroke-width:2;fill:none;stroke-dasharray:7 5}
+    .ksd-dot-now{fill:var(--ksd-accent,#4db9ff);stroke:var(--ksd-accent,#4db9ff);stroke-width:2}
+    .ksd-dot{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-accent,#4db9ff);stroke-width:2}
+    .ksd-dot-vision{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-line,#5c6b77);stroke-width:2;stroke-dasharray:4 3}
+  </style>
+  <rect class="ksd-canvas" x="0" y="0" width="720" height="560"/>
+  <!-- Zeitachse -->
+  <line class="ksd-track" x1="44" y1="63" x2="44" y2="363"/>
+  <line class="ksd-track-planned" x1="44" y1="363" x2="44" y2="463"/>
+  <!-- Stufe 0 -->
+  <circle class="ksd-dot-now" cx="44" cy="63" r="16"/>
+  <text class="ksd-t ksd-num ksd-num-on" x="44" y="68" text-anchor="middle">0</text>
+  <rect class="ksd-box-accent" x="80" y="20" width="620" height="86" rx="2"/>
+  <text class="ksd-t ksd-h" x="100" y="48">Fundament</text>
+  <text class="ksd-t ksd-tag ksd-acc" x="680" y="48" text-anchor="end">IN ARBEIT</text>
+  <text class="ksd-t ksd-s" x="100" y="72">nur Klipper-Profile · eigene Identität und eigenes Datenverzeichnis</text>
+  <text class="ksd-t ksd-s" x="100" y="92">Entfernen der Nicht-Moonraker-Druck-Hosts und des Bambu-Netzwerkcodes</text>
+  <!-- Stufe 1 -->
+  <circle class="ksd-dot" cx="44" cy="163" r="16"/>
+  <text class="ksd-t ksd-num" x="44" y="168" text-anchor="middle">1</text>
+  <rect class="ksd-box" x="80" y="120" width="620" height="86" rx="2"/>
+  <text class="ksd-t ksd-h" x="100" y="148">Maschinen-Sync</text>
+  <text class="ksd-t ksd-tag ksd-mut" x="680" y="148" text-anchor="end">GEPLANT</text>
+  <text class="ksd-t ksd-s" x="100" y="172">echte Grenzen und Input Shaper des Druckers über Moonraker lesen</text>
+  <text class="ksd-t ksd-s" x="100" y="192">jede Beschleunigung und Geschwindigkeit pro Feature dagegen prüfen</text>
+  <!-- Stufe 2 -->
+  <circle class="ksd-dot" cx="44" cy="263" r="16"/>
+  <text class="ksd-t ksd-num" x="44" y="268" text-anchor="middle">2</text>
+  <rect class="ksd-box" x="80" y="220" width="620" height="86" rx="2"/>
+  <text class="ksd-t ksd-h" x="100" y="248">Klipper-genaue Druckzeit</text>
+  <text class="ksd-t ksd-tag ksd-mut" x="680" y="248" text-anchor="end">GEPLANT</text>
+  <text class="ksd-t ksd-s" x="100" y="272">Schätzung mit Klippers Bewegungsmodell und den echten Maschinengrenzen</text>
+  <text class="ksd-t ksd-s" x="100" y="292">einschließlich minimum_cruise_ratio</text>
+  <!-- Stufe 3 -->
+  <circle class="ksd-dot" cx="44" cy="363" r="16"/>
+  <text class="ksd-t ksd-num" x="44" y="368" text-anchor="middle">3</text>
+  <rect class="ksd-box" x="80" y="320" width="620" height="86" rx="2"/>
+  <text class="ksd-t ksd-h" x="100" y="348">Natives adaptives Mesh und Purge</text>
+  <text class="ksd-t ksd-tag ksd-mut" x="680" y="348" text-anchor="end">GEPLANT</text>
+  <text class="ksd-t ksd-s" x="100" y="372">BED_MESH_CALIBRATE ADAPTIVE=1 aus den EXCLUDE_OBJECT-Polygonen</text>
+  <text class="ksd-t ksd-s" x="100" y="392">Purge neben der ersten Schicht · Voraussetzungen vor dem Slicen geprüft</text>
+  <!-- Stufe 4 -->
+  <circle class="ksd-dot-vision" cx="44" cy="463" r="16"/>
+  <text class="ksd-t ksd-num" x="44" y="468" text-anchor="middle">4</text>
+  <rect class="ksd-box-planned" x="80" y="420" width="620" height="86" rx="2"/>
+  <text class="ksd-t ksd-h" x="100" y="448">Regelkreis</text>
+  <text class="ksd-t ksd-tag ksd-mut" x="680" y="448" text-anchor="end">VISION</text>
+  <text class="ksd-t ksd-s" x="100" y="472">gemessene Maschinendaten fließen zurück ins Slicen</text>
+  <text class="ksd-t ksd-s ksd-mut" x="100" y="492">noch kein Entwurf</text>
+  <text class="ksd-t ksd-s ksd-mut" x="20" y="540">Die Stufen sind nach Abhängigkeit geordnet: Jede baut auf den Daten der vorherigen auf.</text>
+</svg>

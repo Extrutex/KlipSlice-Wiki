@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" role="img" aria-labelledby="ksd-arch-title ksd-arch-desc" class="ksd">
+  <title id="ksd-arch-title">KLIPSLICE architecture</title>
+  <desc id="ksd-arch-desc">KLIPSLICE on the desktop talks only to Moonraker over HTTP. Moonraker talks to Klipper over Klipper's Unix socket API. Today KLIPSLICE uploads G-code and starts prints; reading the live Klipper configuration is planned for stage 1.</desc>
+  <style>
+    .ksd-canvas{fill:var(--ksd-canvas,#0b0e11)}
+    .ksd-box{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-line,#5c6b77);stroke-width:1}
+    .ksd-box-accent{fill:var(--ksd-accent-fill,#0f2433);stroke:var(--ksd-accent,#4db9ff);stroke-width:1.5}
+    .ksd-t{font-family:Inter,"IBM Plex Sans","Segoe UI",system-ui,sans-serif;fill:var(--ksd-ink,#d8e0e6)}
+    .ksd-h{font-size:17px;font-weight:600;letter-spacing:.06em}
+    .ksd-s{font-size:13.5px}
+    .ksd-m{font-family:"IBM Plex Mono","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+    .ksd-m-sm{font-size:11.5px}
+    .ksd-mut{fill:var(--ksd-muted,#8b99a4)}
+    .ksd-acc{fill:var(--ksd-accent,#4db9ff)}
+    .ksd-flow{stroke:var(--ksd-accent,#4db9ff);stroke-width:2;fill:none}
+    .ksd-flow-planned{stroke:var(--ksd-accent,#4db9ff);stroke-width:2;fill:none;stroke-dasharray:7 5}
+    .ksd-arrowhead{fill:var(--ksd-accent,#4db9ff)}
+  </style>
+  <defs>
+    <marker id="ksd-arch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path class="ksd-arrowhead" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="ksd-canvas" x="0" y="0" width="960" height="340"/>
+  <!-- KLIPSLICE -->
+  <rect class="ksd-box-accent" x="20" y="40" width="210" height="200" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="74">KLIPSLICE</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="100">desktop slicer</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="120">Windows · macOS · Linux</text>
+  <text class="ksd-t ksd-m" x="40" y="160">gcode_flavor = klipper</text>
+  <text class="ksd-t ksd-m" x="40" y="182">EXCLUDE_OBJECT_DEFINE</text>
+  <text class="ksd-t ksd-m" x="40" y="204">SET_VELOCITY_LIMIT</text>
+  <!-- Moonraker -->
+  <rect class="ksd-box" x="375" y="40" width="210" height="200" rx="2"/>
+  <text class="ksd-t ksd-h" x="395" y="74">Moonraker</text>
+  <text class="ksd-t ksd-s ksd-mut" x="395" y="100">API server on the</text>
+  <text class="ksd-t ksd-s ksd-mut" x="395" y="120">printer host</text>
+  <text class="ksd-t ksd-m" x="395" y="160">/server/files/upload</text>
+  <text class="ksd-t ksd-m" x="395" y="182">/printer/print/start</text>
+  <text class="ksd-t ksd-m" x="395" y="204">/printer/objects/query</text>
+  <text class="ksd-t ksd-m ksd-mut" x="395" y="226">auth: X-Api-Key</text>
+  <!-- Klipper -->
+  <rect class="ksd-box" x="730" y="40" width="210" height="200" rx="2"/>
+  <text class="ksd-t ksd-h" x="750" y="74">Klipper</text>
+  <text class="ksd-t ksd-s ksd-mut" x="750" y="100">klippy host process</text>
+  <text class="ksd-t ksd-s ksd-mut" x="750" y="120">+ MCU firmware</text>
+  <text class="ksd-t ksd-m" x="750" y="160">printer.cfg</text>
+  <text class="ksd-t ksd-m" x="750" y="182">[virtual_sdcard]</text>
+  <text class="ksd-t ksd-m" x="750" y="204">[exclude_object]</text>
+  <!-- KLIPSLICE -> Moonraker (today) -->
+  <line class="ksd-flow" x1="232" y1="110" x2="371" y2="110" marker-end="url(#ksd-arch-arrow)"/>
+  <text class="ksd-t ksd-s" x="302" y="100" text-anchor="middle">upload + start</text>
+  <!-- Moonraker -> KLIPSLICE (planned) -->
+  <line class="ksd-flow-planned" x1="373" y1="180" x2="234" y2="180" marker-end="url(#ksd-arch-arrow)"/>
+  <text class="ksd-t ksd-s" x="302" y="170" text-anchor="middle">config read</text>
+  <text class="ksd-t ksd-s ksd-mut" x="302" y="200" text-anchor="middle">stage 1</text>
+  <!-- Moonraker -> Klipper (today) -->
+  <line class="ksd-flow" x1="587" y1="110" x2="726" y2="110" marker-end="url(#ksd-arch-arrow)"/>
+  <text class="ksd-t ksd-s" x="657" y="100" text-anchor="middle">Unix socket API</text>
+  <!-- Klipper -> Moonraker (planned use) -->
+  <line class="ksd-flow-planned" x1="728" y1="180" x2="589" y2="180" marker-end="url(#ksd-arch-arrow)"/>
+  <text class="ksd-t ksd-m ksd-m-sm" x="657" y="170" text-anchor="middle">configfile.settings</text>
+  <!-- Legend -->
+  <line class="ksd-flow" x1="20" y1="290" x2="70" y2="290"/>
+  <text class="ksd-t ksd-s" x="80" y="294">available today</text>
+  <line class="ksd-flow-planned" x1="220" y1="290" x2="270" y2="290"/>
+  <text class="ksd-t ksd-s" x="280" y="294">planned (stage 1: machine sync)</text>
+  <text class="ksd-t ksd-s ksd-mut" x="20" y="322">Design target: Moonraker is the only host. No vendor cloud, no Bambu network plugin.</text>
+</svg>

@@ -1,0 +1,130 @@
+site_name: KLIPSLICE Wiki
+site_description: Documentation for KLIPSLICE, an open-source, Klipper-only slicer forked from OrcaSlicer.
+copyright: KLIPSLICE is free software under the GNU AGPL-3.0. Wiki content by the KLIPSLICE contributors.
+
+docs_dir: docs
+site_dir: site
+
+# The screenshot capture spec lives next to the screenshots but is not a wiki page.
+exclude_docs: |
+  assets/screenshots/README.md
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+theme:
+  name: material
+  language: en
+  # No web fonts: the stack in extra.css uses Inter / IBM Plex when installed
+  # locally and falls back to system fonts, so no third-party font requests.
+  font: false
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - content.code.copy
+    - content.tabs.link
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.highlight
+    - search.suggest
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: false
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: de
+          name: Deutsch
+          build: true
+          site_description: Dokumentation für KLIPSLICE, einen quelloffenen Slicer nur für Klipper, abgespalten von OrcaSlicer.
+          theme:
+            palette:
+              - media: "(prefers-color-scheme: dark)"
+                scheme: slate
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/weather-sunny
+                  name: Zum hellen Modus wechseln
+              - media: "(prefers-color-scheme: light)"
+                scheme: default
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/weather-night
+                  name: Zum dunklen Modus wechseln
+          nav_translations:
+            Home: Start
+            Vision & roadmap: Vision & Fahrplan
+            Supported printers: Unterstützte Drucker
+            Using KLIPSLICE: KLIPSLICE nutzen
+            Klipper setup: Klipper-Einrichtung
+            Development: Entwicklung
+            Building from source: Aus dem Quellcode bauen
+            Contributing: Mitwirken
+
+nav:
+  - Home: index.md
+  - Vision & roadmap: vision.md
+  - Using KLIPSLICE:
+      - Supported printers: printers.md
+      - Klipper setup: klipper-setup.md
+  - Development:
+      - Building from source: build.md
+      - Contributing: contributing.md
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets:
+      base_path: docs
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true

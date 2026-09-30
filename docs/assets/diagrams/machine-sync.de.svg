@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 640" width="720" height="640" role="img" aria-labelledby="ksd-sync-title ksd-sync-desc" class="ksd">
+  <title id="ksd-sync-title">Datenfluss Maschinen-Sync</title>
+  <desc id="ksd-sync-desc">Die printer.cfg auf dem Drucker-Host wird über Moonrakers printer.objects.query (configfile settings) gelesen. Die daraus gewonnenen Maschinengrenzen begrenzen die Planung pro Feature, die SET_VELOCITY_LIMIT-Befehle in den G-Code schreibt, der über Moonraker hochgeladen wird.</desc>
+  <style>
+    .ksd-canvas{fill:var(--ksd-canvas,#0b0e11)}
+    .ksd-box{fill:var(--ksd-box,#0f1317);stroke:var(--ksd-line,#5c6b77);stroke-width:1}
+    .ksd-box-accent{fill:var(--ksd-accent-fill,#0f2433);stroke:var(--ksd-accent,#4db9ff);stroke-width:1.5}
+    .ksd-t{font-family:Inter,"IBM Plex Sans","Segoe UI",system-ui,sans-serif;fill:var(--ksd-ink,#d8e0e6)}
+    .ksd-h{font-size:16px;font-weight:600;letter-spacing:.04em}
+    .ksd-s{font-size:13px}
+    .ksd-m{font-family:"IBM Plex Mono","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+    .ksd-mut{fill:var(--ksd-muted,#8b99a4)}
+    .ksd-acc{fill:var(--ksd-accent,#4db9ff)}
+    .ksd-flow{stroke:var(--ksd-accent,#4db9ff);stroke-width:2;fill:none}
+    .ksd-arrowhead{fill:var(--ksd-accent,#4db9ff)}
+  </style>
+  <defs>
+    <marker id="ksd-sync-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="ksd-arrowhead" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="ksd-canvas" x="0" y="0" width="720" height="640"/>
+  <!-- 1 printer.cfg -->
+  <rect class="ksd-box" x="20" y="20" width="680" height="80" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="52">printer.cfg</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="76">auf dem Drucker-Host</text>
+  <text class="ksd-t ksd-m" x="250" y="52">[printer] · [input_shaper]</text>
+  <text class="ksd-t ksd-s ksd-mut" x="250" y="76">einschließlich der von SAVE_CONFIG geschriebenen Werte</text>
+  <!-- 2 Moonraker -->
+  <rect class="ksd-box" x="20" y="134" width="680" height="80" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="166">Moonraker</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="190">reine Leseabfrage</text>
+  <text class="ksd-t ksd-m" x="250" y="166">GET /printer/objects/query?configfile=settings</text>
+  <text class="ksd-t ksd-s ksd-mut" x="250" y="190">Stand des letzten Starts oder Neustarts von Klipper</text>
+  <!-- 3 Maschinengrenzen -->
+  <rect class="ksd-box" x="20" y="248" width="680" height="80" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="280">Maschinengrenzen</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="304">konfigurierte Werte</text>
+  <text class="ksd-t ksd-m" x="250" y="280">max_velocity · max_accel</text>
+  <text class="ksd-t ksd-m" x="250" y="300">square_corner_velocity · minimum_cruise_ratio</text>
+  <text class="ksd-t ksd-m" x="250" y="320">shaper_type · shaper_freq_x · shaper_freq_y</text>
+  <!-- 4 Planung -->
+  <rect class="ksd-box-accent" x="20" y="362" width="680" height="80" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="394">Planung</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="418">pro Feature</text>
+  <text class="ksd-t ksd-s" x="250" y="394">Außenwand · Innenwand · Füllung · oben/unten · Leerfahrt</text>
+  <text class="ksd-t ksd-m ksd-acc" x="250" y="418">accel ≤ max_accel · speed ≤ max_velocity</text>
+  <!-- 5 G-Code -->
+  <rect class="ksd-box" x="20" y="476" width="680" height="80" rx="2"/>
+  <text class="ksd-t ksd-h" x="40" y="508">G-Code</text>
+  <text class="ksd-t ksd-s ksd-mut" x="40" y="532">Upload über Moonraker</text>
+  <text class="ksd-t ksd-m" x="250" y="508">SET_VELOCITY_LIMIT ACCEL=…</text>
+  <text class="ksd-t ksd-m" x="250" y="532">SET_VELOCITY_LIMIT SQUARE_CORNER_VELOCITY=…</text>
+  <!-- Pfeile -->
+  <line class="ksd-flow" x1="120" y1="102" x2="120" y2="130" marker-end="url(#ksd-sync-arrow)"/>
+  <line class="ksd-flow" x1="120" y1="216" x2="120" y2="244" marker-end="url(#ksd-sync-arrow)"/>
+  <line class="ksd-flow" x1="120" y1="330" x2="120" y2="358" marker-end="url(#ksd-sync-arrow)"/>
+  <line class="ksd-flow" x1="120" y1="444" x2="120" y2="472" marker-end="url(#ksd-sync-arrow)"/>
+  <!-- Hinweis -->
+  <text class="ksd-t ksd-s" x="20" y="588">Klipper übernimmt SET_VELOCITY_LIMIT- und M204-Werte auch oberhalb der printer.cfg-Werte</text>
+  <text class="ksd-t ksd-s" x="20" y="608">(Klipper-Config-Changes, 30.04.2021).</text>
+  <text class="ksd-t ksd-s ksd-mut" x="20" y="630">Die Grenzprüfung muss deshalb im Slicer stattfinden, bevor der G-Code geschrieben wird.</text>
+</svg>
