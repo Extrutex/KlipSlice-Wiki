@@ -2,49 +2,51 @@
 
 # Unterstützte Drucker
 
-Diese Liste wird von `scripts/gen_printers.py` aus den Druckerprofilen im KLIPSLICE-Quellbaum (`resources/profiles/`) erzeugt. Nicht von Hand bearbeiten, sondern neu generieren.
+Diese Liste erzeugt `scripts/gen_printers.py` aus genau einem Commit des KLIPSLICE-Quellrepositorys: aus den Druckerprofilen in `resources/profiles/` und den Firmware-Nachweisen je Modell in `docs/klipslice/printer-firmware.json`. Nicht von Hand bearbeiten, sondern neu generieren.
 
 !!! info "Verbindung"
 
-    KLIPSLICE nutzt Moonraker als einzigen Druck-Host. Das gilt auch für die Klipper-Modelle von Creality, Elegoo, Qidi, Snapmaker und Flashforge: Sie werden über Moonraker angebunden, nicht über eine Hersteller-Cloud oder ein herstellereigenes Protokoll. Einige aus OrcaSlicer übernommene Profildateien nennen noch ihren ursprünglichen Host-Typ; KLIPSLICE bildet beim Laden eines Profils oder Projekts jeden Host-Typ auf Moonraker ab.
+    KLIPSLICE nutzt Moonraker als einzigen Druck-Host. Auch Drucker von Herstellern mit eigener Klipper-Integration werden über Moonraker angebunden, nicht über eine Hersteller-Cloud oder ein herstellereigenes Protokoll. Wo die Werks-Firmware Moonraker nicht anbietet, steht das in der Spalte *Firmware*, zusammen mit dem Community-Projekt, das Moonraker nachrüstet.
 
-Jeder hier aufgeführte Drucker läuft mit Klipper. Der Generator löst jedes Druckerprofil über seine Vererbungskette auf und bricht ab, sobald ein Profil bei einem anderen G-Code-Dialekt als `klipper` landet.
+KLIPSLICE liefert ein Systemprofil nur für Drucker, die nachweislich echtes Klipper ausführen: ab Werk, über einen etablierten Community-Mod oder als Selbstbau. Der Generator bricht ab, sobald ein Profil bei einem anderen G-Code-Dialekt als `klipper` landet, ein Profilmodell keinen Firmware-Nachweis hat oder Nachweise und Profile nicht zusammenpassen.
 
 ## Übersicht
 
 | Hersteller | Druckermodelle | Druckerprofile (Modell × Düse) |
 |---:|---:|---:|
-| 47 | 201 | 574 |
+| 41 | 174 | 505 |
+
+| Firmware-Status | Modelle |
+|---|---:|
+| Klipper + Moonraker (ab Werk) | 104 |
+| Klipper (ab Werk), Moonraker per Root oder Mod | 17 |
+| Echtes Klipper per etabliertem Mod | 11 |
+| Klipper im Selbstbau | 42 |
 
 | Hersteller | Modelle |
 |---|---:|
-| [Afinia](#vendor-afinia) | 1 |
-| [Anycubic](#vendor-anycubic) | 9 |
+| [Anycubic](#vendor-anycubic) | 6 |
 | [Artillery](#vendor-artillery) | 3 |
 | [BIQU](#vendor-biqu) | 1 |
-| [Blocks](#vendor-blocks) | 3 |
-| [Chuanying](#vendor-chuanying) | 1 |
+| [Blocks](#vendor-blocks) | 2 |
 | [Co Print](#vendor-co-print) | 1 |
-| [CoLiDo](#vendor-colido) | 3 |
 | [Comgrow](#vendor-comgrow) | 2 |
-| [Creality](#vendor-creality) | 24 |
-| [Cubicon](#vendor-cubicon) | 3 |
+| [Creality](#vendor-creality) | 22 |
+| [Cubicon](#vendor-cubicon) | 1 |
 | [Custom Printer](#vendor-custom-printer) | 2 |
 | [DeltaMaker](#vendor-deltamaker) | 3 |
-| [Elegoo](#vendor-elegoo) | 9 |
+| [Elegoo](#vendor-elegoo) | 6 |
 | [Eryone](#vendor-eryone) | 2 |
-| [Flashforge](#vendor-flashforge) | 9 |
+| [Flashforge](#vendor-flashforge) | 6 |
 | [FLSun](#vendor-flsun) | 3 |
 | [FlyingBear](#vendor-flyingbear) | 3 |
 | [Ginger Additive](#vendor-ginger-additive) | 1 |
 | [InfiMech](#vendor-infimech) | 4 |
 | [Kingroon](#vendor-kingroon) | 3 |
 | [LH](#vendor-lh) | 2 |
-| [LONGER](#vendor-longer) | 2 |
-| [MagicMaker](#vendor-magicmaker) | 2 |
+| [LONGER](#vendor-longer) | 1 |
 | [Mellow](#vendor-mellow) | 1 |
 | [OpenEYE](#vendor-openeye) | 1 |
-| [Orca Arena Printer](#vendor-orca-arena-printer) | 1 |
 | [Peopoly](#vendor-peopoly) | 1 |
 | [Phrozen](#vendor-phrozen) | 1 |
 | [Positron 3D](#vendor-positron-3d) | 1 |
@@ -56,7 +58,6 @@ Jeder hier aufgeführte Drucker läuft mit Klipper. Der Generator löst jedes Dr
 | [SecKit](#vendor-seckit) | 2 |
 | [Snapmaker](#vendor-snapmaker) | 1 |
 | [Sovol](#vendor-sovol) | 6 |
-| [Tiertime](#vendor-tiertime) | 4 |
 | [TwoTrees](#vendor-twotrees) | 2 |
 | [Vivedino](#vendor-vivedino) | 1 |
 | [Volumic](#vendor-volumic) | 12 |
@@ -66,444 +67,411 @@ Jeder hier aufgeführte Drucker läuft mit Klipper. Der Generator löst jedes Dr
 | [WonderMaker](#vendor-wondermaker) | 3 |
 | [Z-Bolt](#vendor-z-bolt) | 9 |
 
-## Afinia { #vendor-afinia }
+## Firmware-Status { #firmware-status }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Afinia H+1(HS) | 0.4, 0.6 |
+Jedes Modell hat genau einen dieser Status:
+
+Klipper + Moonraker (ab Werk)
+:   Der Drucker läuft im Auslieferungszustand mit Klipper und Moonraker. Hersteller-Firmware ist oft ein angepasstes Klipper; das zählt, solange Moonraker erreichbar ist.
+
+Klipper (ab Werk), Moonraker per Root oder Mod
+:   Der Drucker läuft ab Werk mit einer Klipper-basierten Firmware, Moonraker muss aber per Root-Zugang oder Community-Mod freigeschaltet werden (in der Spalte *Mod-Projekt* verlinkt, sofern vorhanden).
+
+Echtes Klipper per etabliertem Mod
+:   Die Werks-Firmware ist kein echtes Klipper. Ein etabliertes Community-Projekt ersetzt oder erweitert sie um Klipper und Moonraker (in der Spalte *Mod-Projekt* verlinkt).
+
+Klipper im Selbstbau
+:   Ein Bausatz oder Selbstbau-Design, das der Erbauer mit Klipper und Moonraker einrichtet.
+
+Sicherheit
+:   Wie belastbar der Nachweis für den Firmware-Status ist, bewertet bei der Recherche zum Modell (*hoch*, *mittel* oder *niedrig*). Modelle mit *niedrig* bleiben in der Liste, weil die verfügbaren Hinweise auf Klipper zeigen, die Beleglage aber dünn ist; Rückmeldungen von Besitzern sind willkommen.
+
+## Eigener Klipper-Drucker { #own-printer }
+
+Ein Drucker braucht kein Systemprofil, um mit KLIPSLICE zu funktionieren. Selbstbauten und umgebaute Drucker (etwa ein Marlin-Drucker, der jetzt mit neuem Board oder Raspberry Pi unter Klipper läuft) sind vollwertig unterstützt:
+
+- **Generic Klipper Printer** (Hersteller *Custom Printer*): ein neutraler Ausgangspunkt für jede Klipper-Maschine. In der Druckerauswahl wählen, dann Bettgröße, Düse und Grenzwerte der eigenen Maschine eintragen. **Generic ToolChanger Printer** ist das Gegenstück für Werkzeugwechsler.
+- **Create printer**: im Tab *Prepare* das Drucker-Auswahlmenü öffnen und *Create printer* wählen. Der Dialog *Create Printer/Nozzle* legt einen Drucker aus einer Vorlage oder auf Basis des aktuellen Druckers an, mit beliebigem Hersteller- und Modellnamen, auch frei eingetippt.
+
+In beiden Fällen ist der G-Code-Dialekt Klipper und der Druck-Host Moonraker. Welche Makros KLIPSLICE erwartet, steht unter [Klipper-Einrichtung](klipper-setup.md). Wie man ein Profil für einen hier fehlenden Klipper-Drucker beisteuert, steht unter [Mitwirken](contributing.md#printer-profiles).
 
 ## Anycubic { #vendor-anycubic }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Anycubic Kobra 2 Max | 0.4 |
-| Anycubic Kobra 2 Plus | 0.4 |
-| Anycubic Kobra 2 Pro | 0.4 |
-| Anycubic Kobra 3 | 0.2, 0.4, 0.6, 0.8 |
-| Anycubic Kobra 3 Max | 0.4, 0.6, 0.8 |
-| Anycubic Kobra 3 V2 | 0.2, 0.4, 0.6, 0.8 |
-| Anycubic Kobra S1 | 0.4 |
-| Anycubic Kobra S1 Max | 0.25, 0.4, 0.6, 0.8 |
-| Anycubic Kobra X | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Anycubic Kobra 2 Pro | 0.4 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | mittel | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[newreleases.io](https://newreleases.io/project/github/rinkhals-community/Rinkhals.Apps/release/20260527_01)<br>[blog.octoeverywhere.com](https://blog.octoeverywhere.com/how-to-install-klipper-on-your-anycubic-3d-printer/) |
+| Anycubic Kobra 3 | 0.2, 0.4, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | hoch | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[newreleases.io](https://newreleases.io/project/github/rinkhals-community/Rinkhals.Apps/release/20260527_01)<br>[blog.octoeverywhere.com](https://blog.octoeverywhere.com/how-to-install-klipper-on-your-anycubic-3d-printer/) |
+| Anycubic Kobra 3 Max | 0.4, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | mittel | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[newreleases.io](https://newreleases.io/project/github/rinkhals-community/Rinkhals.Apps/release/20260527_01) |
+| Anycubic Kobra 3 V2 | 0.2, 0.4, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | mittel | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[newreleases.io](https://newreleases.io/project/github/rinkhals-community/Rinkhals.Apps/release/20260527_01) |
+| Anycubic Kobra S1 | 0.4 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | hoch | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[blog.octoeverywhere.com](https://blog.octoeverywhere.com/how-to-install-klipper-on-your-anycubic-3d-printer/) |
+| Anycubic Kobra S1 Max | 0.25, 0.4, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals) | mittel | [rinkhals-community/Rinkhals](https://github.com/rinkhals-community/Rinkhals/)<br>[newreleases.io](https://newreleases.io/project/github/rinkhals-community/Rinkhals.Apps/release/20260527_01) |
 
 ## Artillery { #vendor-artillery }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Artillery M1 Pro | 0.2, 0.4, 0.6, 0.8 |
-| Artillery Sidewinder X4 Plus | 0.4 |
-| Artillery Sidewinder X4 Pro | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Artillery M1 Pro | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [printago.io](https://printago.io/printers/artillery-m1-pro) |
+| Artillery Sidewinder X4 Plus | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io (1)](https://simplyprint.io/compatibility/artillery-3d-sidewinder-x4-plus)<br>[simplyprint.io (2)](https://simplyprint.io/setup-guide/artillery-3d/sidewinder-x4-plus/klipper-powered) |
+| Artillery Sidewinder X4 Pro | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/artillery-3d/sidewinder-x4-pro/klipper-powered) |
 
 ## BIQU { #vendor-biqu }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| BIQU Hurakan | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| BIQU Hurakan | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [biqu.equipment](https://biqu.equipment/products/biqu-hurakan) |
 
 ## Blocks { #vendor-blocks }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| BLOCKS Pro S100 | 0.4, 0.6, 0.8, 1.0, 1.2 |
-| BLOCKS RD50 V2 | 0.4, 0.6, 0.8 |
-| BLOCKS RF50 | 0.4, 0.6, 0.8 |
-
-## Chuanying { #vendor-chuanying }
-
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Chuanying X1 | 0.25, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| BLOCKS RD50 V2 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | niedrig | [printago.io](https://printago.io/printers/blocks-rd50-v2) |
+| BLOCKS RF50 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | niedrig | [printago.io](https://printago.io/printers/blocks-rf50)<br>[OrcaSlicer/OrcaSlicer](https://github.com/OrcaSlicer/OrcaSlicer/pull/15804) |
 
 ## Co Print { #vendor-co-print }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Co Print ChromaSet | 0.4 |
-
-## CoLiDo { #vendor-colido }
-
-| Modell | Düsengrößen (mm) |
-|---|---|
-| CoLiDo DIY 4.0 | 0.4 |
-| CoLiDo DIY 4.0 V2 | 0.4 |
-| CoLiDo SR1 | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Co Print ChromaSet | 0.4 | Echtes Klipper per etabliertem Mod | [coprint3d.com](https://coprint3d.com) | mittel | [coprint3d.com](https://coprint3d.com/collections/all)<br>[all3dp.com](https://all3dp.com/4/this-kickstarter-wants-to-bring-a-multi-filament-system-to-klipper-printers/) |
 
 ## Comgrow { #vendor-comgrow }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Comgrow T300 | 0.4 |
-| Comgrow T500 | 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Comgrow T300 | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/comgrow/t300.md) |
+| Comgrow T500 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [sovol.tech](https://www.sovol.tech/products/comgrow-t500-large-format-klipper-3d-printer-linear-rails)<br>[amazon.com](https://www.amazon.com/clp/B0CH886RQS)<br>[simplyprint.io](https://simplyprint.io/compatibility/comgrow-t500) |
 
 ## Creality { #vendor-creality }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Creality CR-10 SE | 0.2, 0.4, 0.6, 0.8 |
-| Creality CR-M4 SE | 0.4 |
-| Creality Ender-3 S1 Sonic | 0.4 |
-| Creality Ender-3 V3 | 0.4, 0.6, 0.8 |
-| Creality Ender-3 V3 KE | 0.2, 0.4, 0.6, 0.8 |
-| Creality Ender-3 V3 Plus | 0.4, 0.6, 0.8 |
-| Creality Ender-3 V4 | 0.4 |
-| Creality Ender-5 Max | 0.4, 0.6, 0.8 |
-| Creality Ender-5 S1 Sonic | 0.4 |
-| Creality Hi | 0.2, 0.4, 0.6, 0.8 |
-| Creality K1 | 0.4, 0.6, 0.8 |
-| Creality K1 Max | 0.4, 0.6, 0.8 |
-| Creality K1 Max_CFS-C | 0.4 |
-| Creality K1 SE | 0.4, 0.6, 0.8 |
-| Creality K1 SE_CFS-C | 0.4 |
-| Creality K1_CFS-C | 0.4 |
-| Creality K1C | 0.4, 0.6, 0.8 |
-| Creality K1C_CFS-C | 0.4 |
-| Creality K2 | 0.2, 0.4, 0.6, 0.8 |
-| Creality K2 Plus | 0.2, 0.4, 0.6, 0.8 |
-| Creality K2 Pro | 0.2, 0.4, 0.6, 0.8 |
-| Creality K2 SE | 0.4 |
-| Creality Sermoon M300 | 0.4, 0.6, 0.8 |
-| Creality SPARKX i7 | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Creality CR-10 SE | 0.2, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [all3dp.com](https://all3dp.com/4/creality-announces-cr-10-se-3d-printer-running-quasi-klipper-creality-os/)<br>[simplyprint.io](https://simplyprint.io/setup-guide/creality/cr-10-se.md) |
+| Creality Ender-3 S1 Sonic | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [creality.com](https://www.creality.com/blog/creality-to-advance-3d-printing-with-industrys-first-klipper-integrated-sonic-pad)<br>[simplyprint.io](https://simplyprint.io/setup-guide/creality/ender-3-s1-pro/sonic-pad/fluidd-setup) |
+| Creality Ender-3 V3 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [wiki.creality.com](https://wiki.creality.com/en/ender-series/ender-3-v3/quick-start-guide/how-to-control-the-ender-3-v3-using-fluidd-over-a-local-area-network) |
+| Creality Ender-3 V3 KE | 0.2, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/ender-3-v3-ke.md)<br>[guilouz.github.io](https://guilouz.github.io/Creality-Helper-Script-Wiki/) |
+| Creality Ender-3 V3 Plus | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.creality.com](https://wiki.creality.com/en/ender-series/ender-3-v3-plus/quick-start-guide)<br>[simplyprint.io](https://simplyprint.io/setup-guide/creality/ender-3-v3-plus.md) |
+| Creality Ender-3 V4 | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [creality.com](https://www.creality.com/de/products/ender-3-v4) |
+| Creality Ender-5 Max | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io (1)](https://simplyprint.io/compatibility/creality-ender-5-max)<br>[simplyprint.io (2)](https://simplyprint.io/setup-guide/creality/ender-5-max.md) |
+| Creality Ender-5 S1 Sonic | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [creality.com](https://www.creality.com/blog/creality-to-advance-3d-printing-with-industrys-first-klipper-integrated-sonic-pad) |
+| Creality Hi | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [forum.creality.com](https://forum.creality.com/t/upgrading-the-pre-installed-moonraker-and-fluidd-packages/43309) |
+| Creality K1 | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1.md)<br>[guilouz.github.io](https://guilouz.github.io/Creality-Helper-Script-Wiki/) |
+| Creality K1 Max | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1-max.md)<br>[guilouz.github.io](https://guilouz.github.io/Creality-Helper-Script-Wiki/) |
+| Creality K1 Max_CFS-C | 0.4 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1-max.md) |
+| Creality K1 SE | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1-se.md) |
+| Creality K1 SE_CFS-C | 0.4 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1-se.md) |
+| Creality K1_CFS-C | 0.4 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1.md) |
+| Creality K1C | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1c.md)<br>[forum.creality.com](https://forum.creality.com/t/k1c-2025-orcaslicer-workarounds-for-missing-web-interface/47164) |
+| Creality K1C_CFS-C | 0.4 | Klipper (ab Werk), Moonraker per Root oder Mod | [Guilouz/Creality-Helper-Script](https://github.com/Guilouz/Creality-Helper-Script) | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k1c.md) |
+| Creality K2 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k2.md)<br>[docs.printago.io](https://docs.printago.io/docs/connecting-printers/creality) |
+| Creality K2 Plus | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k2-plus.md)<br>[docs.printago.io](https://docs.printago.io/docs/connecting-printers/creality)<br>[wiki.creality.com](https://wiki.creality.com/en/k2-flagship-series/k2-plus/3rd-party-slicing) |
+| Creality K2 Pro | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k2-pro.md)<br>[docs.printago.io](https://docs.printago.io/docs/connecting-printers/creality) |
+| Creality K2 SE | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/k2-se.md) |
+| Creality SPARKX i7 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/creality/sparkx-i7.md) |
 
 ## Cubicon { #vendor-cubicon }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Cubicon xCeler-I | 0.4 |
-| Cubicon xCeler-Mini | 0.4 |
-| Cubicon xCeler-Plus | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Cubicon xCeler-I | 0.4 | Klipper + Moonraker (ab Werk) | – | niedrig | [SoftFever/OrcaSlicer](https://github.com/SoftFever/OrcaSlicer/pull/10373)<br>[Hyvision/OrcaForCubicon](https://github.com/Hyvision/OrcaForCubicon) |
 
 ## Custom Printer { #vendor-custom-printer }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Generic Klipper Printer | 0.2, 0.4, 0.6, 0.8 |
-| Generic ToolChanger Printer | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Generic Klipper Printer | 0.2, 0.4, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [klipper3d.org](https://www.klipper3d.org/)<br>[moonraker.readthedocs.io](https://moonraker.readthedocs.io/) |
+| Generic ToolChanger Printer | 0.2, 0.4, 0.6, 0.8 | Klipper im Selbstbau | – | mittel | [klipper3d.org](https://www.klipper3d.org/) |
 
 ## DeltaMaker { #vendor-deltamaker }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| DeltaMaker 2 | 0.35 |
-| DeltaMaker 2T | 0.5 |
-| DeltaMaker 2XT | 0.5 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| DeltaMaker 2 | 0.35 | Klipper + Moonraker (ab Werk) | – | mittel | [DeltaMaker/deltamaker-config](https://github.com/DeltaMaker/deltamaker-config)<br>[deltamaker.com](https://www.deltamaker.com/products/deltamaker-2)<br>[DeltaMaker/klipper](https://github.com/DeltaMaker/klipper) |
+| DeltaMaker 2T | 0.5 | Klipper + Moonraker (ab Werk) | – | mittel | [DeltaMaker/deltamaker-config](https://github.com/DeltaMaker/deltamaker-config) |
+| DeltaMaker 2XT | 0.5 | Klipper + Moonraker (ab Werk) | – | mittel | [DeltaMaker/deltamaker-config](https://github.com/DeltaMaker/deltamaker-config) |
 
 ## Elegoo { #vendor-elegoo }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Elegoo Centauri | 0.2, 0.4, 0.6, 0.8 |
-| Elegoo Centauri 2 | 0.2, 0.4, 0.6, 0.8 |
-| Elegoo Centauri Carbon | 0.2, 0.4, 0.6, 0.8 |
-| Elegoo Centauri Carbon 2 | 0.2, 0.4, 0.6, 0.8 |
-| Elegoo Neptune 4 | 0.2, 0.4, 0.6, 0.8, 1.0 |
-| Elegoo Neptune 4 Max | 0.2, 0.4, 0.6, 0.8, 1.0 |
-| Elegoo Neptune 4 Plus | 0.2, 0.4, 0.6, 0.8, 1.0 |
-| Elegoo Neptune 4 Pro | 0.2, 0.4, 0.6, 0.8, 1.0 |
-| Elegoo OrangeStorm Giga | 0.4, 0.6, 0.8, 1.0 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Elegoo Centauri Carbon | 0.2, 0.4, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [OpenCentauri/cosmos](https://github.com/OpenCentauri/cosmos) | niedrig | [OpenCentauri/cosmos](https://github.com/OpenCentauri/cosmos)<br>[all3dp.com](https://all3dp.com/4/elegoo-releases-centauri-carbon-firmware-code-but-questions-remain/) |
+| Elegoo Neptune 4 | 0.2, 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/elegoo/neptune-4-pro.md)<br>[printago.io](https://printago.io/printers/elegoo-neptune-4) |
+| Elegoo Neptune 4 Max | 0.2, 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/elegoo/neptune-4-pro.md) |
+| Elegoo Neptune 4 Plus | 0.2, 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | hoch | [printago.io](https://printago.io/printers/elegoo-neptune-4-plus)<br>[raspberry.tips](https://raspberry.tips/en/?p=16938) |
+| Elegoo Neptune 4 Pro | 0.2, 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/elegoo/neptune-4-pro.md)<br>[klipper.discourse.group](https://klipper.discourse.group/t/klipper-config-files-for-neptune-4-pro/10674) |
+| Elegoo OrangeStorm Giga | 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/elegoo/neptune-4-pro.md) |
 
 ## Eryone { #vendor-eryone }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Eryone ER20 Klipper | 0.2, 0.4, 0.5, 0.6, 0.8 |
-| Thinker X400 | 0.2, 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Eryone ER20 Klipper | 0.2, 0.4, 0.5, 0.6, 0.8 | Echtes Klipper per etabliertem Mod | [SoftFever/OrcaSlicer](https://github.com/SoftFever/OrcaSlicer/pull/10607) | niedrig | [SoftFever/OrcaSlicer](https://github.com/SoftFever/OrcaSlicer/pull/10607)<br>[Eryone/STM32](https://github.com/Eryone/STM32/issues/8)<br>[forum.drucktipps3d.de](https://forum.drucktipps3d.de/forum/thread/42569-eryone-er-20-auf-klipper-umstellen/) |
+| Thinker X400 | 0.2, 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [notebookcheck.com](https://www.notebookcheck.com/Thinker-X400-3D-Drucker-bietet-grossen-Bauraum-und-offene-Firmware.1132410.0.html)<br>[printago.io](https://printago.io/printers/eryone-thinker-x400) |
 
 ## Flashforge { #vendor-flashforge }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Flashforge AD5X | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Adventurer 5M | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Adventurer 5M Pro | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Adventurer A5 | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Creator 5 | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Creator 5 Pro | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Guider 3 Ultra | 0.4, 0.6, 0.8 |
-| Flashforge Guider4 | 0.25, 0.4, 0.6, 0.8 |
-| Flashforge Guider4 Pro | 0.25, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Flashforge AD5X | 0.25, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [ghzserg/zmod](https://github.com/ghzserg/zmod) | hoch | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[simplyprint.io](https://simplyprint.io/setup-guide/flashforge/ad5x.md)<br>[revspace.nl](https://revspace.nl/Flashforge_AD5X) |
+| Flashforge Adventurer 5M | 0.25, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[DrA1ex/ff5m](https://github.com/DrA1ex/ff5m)<br>[xblax/flashforge_ad5m_klipper_mod](https://github.com/xblax/flashforge_ad5m_klipper_mod) | hoch | [xblax/flashforge_ad5m_klipper_mod](https://github.com/xblax/flashforge_ad5m_klipper_mod)<br>[ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[DrA1ex/ff5m](https://github.com/DrA1ex/ff5m) |
+| Flashforge Adventurer 5M Pro | 0.25, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[DrA1ex/ff5m](https://github.com/DrA1ex/ff5m)<br>[xblax/flashforge_ad5m_klipper_mod](https://github.com/xblax/flashforge_ad5m_klipper_mod) | hoch | [xblax/flashforge_ad5m_klipper_mod](https://github.com/xblax/flashforge_ad5m_klipper_mod)<br>[ghzserg/zmod](https://github.com/ghzserg/zmod) |
+| Flashforge Creator 5 | 0.25, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[Klipper4FlashForge/firmware](https://github.com/Klipper4FlashForge/firmware) | mittel | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[Klipper4FlashForge/firmware](https://github.com/Klipper4FlashForge/firmware) |
+| Flashforge Creator 5 Pro | 0.25, 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[Klipper4FlashForge/firmware](https://github.com/Klipper4FlashForge/firmware) | mittel | [ghzserg/zmod](https://github.com/ghzserg/zmod)<br>[Klipper4FlashForge/firmware](https://github.com/Klipper4FlashForge/firmware)<br>[Monstrofil/creator5-toolchange](https://github.com/Monstrofil/creator5-toolchange) |
+| Flashforge Guider 3 Ultra | 0.4, 0.6, 0.8 | Klipper (ab Werk), Moonraker per Root oder Mod | – | niedrig | [3dprint.com](https://3dprint.com/306674/3d-printer-review-the-flashforge-guider-3-ultra-an-unfinished-beast/)<br>[flashforge.com](https://www.flashforge.com/a/docs/guider-3-ultra/firmware-release-note) |
 
 ## FLSun { #vendor-flsun }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| FLSun S1 | 0.4 |
-| FLSun T1 | 0.4 |
-| FLSun V400 | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| FLSun S1 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [wiki.flsun3d.com](https://wiki.flsun3d.com/en/home/software)<br>[simplyprint.io](https://simplyprint.io/setup-guide/flsun/s1/enable-simplyprint/moonraker) |
+| FLSun T1 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [wiki.flsun3d.com](https://wiki.flsun3d.com/en/home/software)<br>[simplyprint.io](https://simplyprint.io/setup-guide/flsun/t1/enable-simplyprint) |
+| FLSun V400 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [Guilouz/Klipper-Flsun-Speeder-Pad](https://github.com/Guilouz/Klipper-Flsun-Speeder-Pad/wiki)<br>[wiki.flsun3d.com](https://wiki.flsun3d.com/en/home/software) |
 
 ## FlyingBear { #vendor-flyingbear }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| FlyingBear Ghost7 | 0.4 |
-| FlyingBear Reborn3 | 0.4 |
-| FlyingBear S1 | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| FlyingBear Ghost7 | 0.4 | Klipper + Moonraker (ab Werk) | – | niedrig | [printago.io](https://printago.io/printers/flyingbear-ghost7)<br>[3dflyingbear.com](https://3dflyingbear.com/products/flying-bear-ghost7-3d-printer-with-auto-platform-swap-5-color-printing-600mm-s-speed) |
+| FlyingBear Reborn3 | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [3dflyingbear.com](https://3dflyingbear.com/products/flying-bear-3d-printer-reborn-3)<br>[printago.io](https://printago.io/printers/flyingbear-reborn3) |
+| FlyingBear S1 | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [3dflyingbear.com](https://3dflyingbear.com/products/flying-bear-high-speed-3d-printer-s1)<br>[printago.io](https://printago.io/printers/flyingbear-s1) |
 
 ## Ginger Additive { #vendor-ginger-additive }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Ginger G1 | 1.2, 3.0, 5.0, 8.0 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Ginger G1 | 1.2, 3.0, 5.0, 8.0 | Klipper + Moonraker (ab Werk) | – | mittel | [gingeradditive.com](https://gingeradditive.com)<br>[printago.io](https://printago.io/printers/ginger-additive-ginger-g1) |
 
 ## InfiMech { #vendor-infimech }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| InfiMech EX | 0.4 |
-| InfiMech EX+APS | 0.4 |
-| InfiMech TX | 0.4 |
-| InfiMech TX Hardened Steel Nozzle | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| InfiMech EX | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [printago.io](https://printago.io/printers/infimech-ex)<br>[jimmyjon711/InfimechTxUpgrade](https://github.com/jimmyjon711/InfimechTxUpgrade) |
+| InfiMech EX+APS | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [printago.io](https://printago.io/printers/infimech-ex-aps) |
+| InfiMech TX | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [jimmyjon711/InfimechTxUpgrade](https://github.com/jimmyjon711/InfimechTxUpgrade)<br>[printago.io](https://printago.io/printers/infimech-tx) |
+| InfiMech TX Hardened Steel Nozzle | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [jimmyjon711/InfimechTxUpgrade](https://github.com/jimmyjon711/InfimechTxUpgrade) |
 
 ## Kingroon { #vendor-kingroon }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Kingroon KLP1 | 0.4 |
-| Kingroon KP3S PRO V2 | 0.4 |
-| Kingroon KP3S V1 | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Kingroon KLP1 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [obico.io](https://obico.io/blog/kingroon-klipper-remote-access-and-ai/)<br>[framboise314.fr](https://www.framboise314.fr/wp-content/uploads/2023/12/KLP1_Notice-EN-V2.1.pdf) |
+| Kingroon KP3S PRO V2 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [obico.io](https://obico.io/blog/kingroon-klipper-remote-access-and-ai/)<br>[simplyprint.io](https://simplyprint.io/setup-guide/kingroon/kp3s-pro-v2.md) |
+| Kingroon KP3S V1 | 0.4 | Echtes Klipper per etabliertem Mod | [Klipper3d/klipper](https://github.com/Klipper3d/klipper/tree/master/config) | mittel | [3dprintbeginner.com](https://3dprintbeginner.com/how-to-install-klipper-on-kingroon-kp3s/)<br>[Klipper3d/klipper](https://github.com/Klipper3d/klipper/tree/master/config) |
 
 ## LH { #vendor-lh }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| LH Stinger | 0.4 |
-| LH Stinger MMU | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| LH Stinger | 0.4 | Klipper im Selbstbau | – | hoch | [lhndo/LH-Stinger](https://github.com/lhndo/LH-Stinger) |
+| LH Stinger MMU | 0.4 | Klipper im Selbstbau | – | hoch | [lhndo/LH-Stinger](https://github.com/lhndo/LH-Stinger) |
 
 ## LONGER { #vendor-longer }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| LONGER LK10 | 0.2, 0.4, 0.6, 0.8 |
-| LONGER LK10 Plus | 0.2, 0.4, 0.6, 0.8 |
-
-## MagicMaker { #vendor-magicmaker }
-
-| Modell | Düsengrößen (mm) |
-|---|---|
-| MM BoneKing | 0.4 |
-| MM hj SK | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| LONGER LK10 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | niedrig | [longer.net](https://www.longer.net/products/lk10-fdm-3d-printer)<br>[igeekphone.com](https://www.igeekphone.com/longer-lk10-3d-printer-review-high-speed-klipper-performance-meets-precision-printing/) |
 
 ## Mellow { #vendor-mellow }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| M1 | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| M1 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [eponra/flatpack](https://github.com/eponra/flatpack)<br>[mellow.klipper.cn](https://mellow.klipper.cn/) |
 
 ## OpenEYE { #vendor-openeye }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| OpenEYE Peacock V2 | 0.2, 0.4, 0.6, 0.8 |
-
-## Orca Arena Printer { #vendor-orca-arena-printer }
-
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Orca Arena X1 Carbon | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| OpenEYE Peacock V2 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | niedrig | [OrcaSlicer/OrcaSlicer (1)](https://github.com/OrcaSlicer/OrcaSlicer/pull/11745)<br>[OrcaSlicer/OrcaSlicer (2)](https://github.com/OrcaSlicer/OrcaSlicer/blob/main/resources/profiles/OpenEYE/process/0.16mm%20Standard%20@OpenEYE%20Peacock%20V2.json) |
 
 ## Peopoly { #vendor-peopoly }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Peopoly Magneto X | 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Peopoly Magneto X | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [simplyprint.io](https://simplyprint.io/setup-guide/peopoly/magneto-x.md) |
 
 ## Phrozen { #vendor-phrozen }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Phrozen Arco | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Phrozen Arco | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [phrozen3d/Phrozen_ARCO](https://github.com/phrozen3d/Phrozen_ARCO)<br>[solutionphil/arco-unleashed](https://github.com/solutionphil/arco-unleashed) |
 
 ## Positron 3D { #vendor-positron-3d }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| The Positron | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| The Positron | 0.2, 0.4, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [jeffgeerling.com](https://www.jeffgeerling.com/blog/2024/positron-upside-down-and-portable-3d-printer/)<br>[simplyprint.io](https://simplyprint.io/setup-guide/positron-3d/positron-v3) |
 
 ## Qidi { #vendor-qidi }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Qidi Q1 Pro | 0.2, 0.4, 0.6, 0.8 |
-| Qidi Q2 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi Q2C | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Max 3 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Max 4 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Plus 3 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Plus 4 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Plus 5 | 0.2, 0.4, 0.6, 0.8 |
-| Qidi X-Smart 3 | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Qidi Q1 Pro | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [QIDITECH/QIDI_Q1_Pro](https://github.com/QIDITECH/QIDI_Q1_Pro)<br>[Phil1988/FreeDi](https://github.com/Phil1988/FreeDi) |
+| Qidi Q2 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [simplyprint.io](https://simplyprint.io/setup-guide/qidi-tech/q2.md)<br>[53Aries/Q2-Klipper](https://github.com/53Aries/Q2-Klipper) |
+| Qidi Q2C | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [eu.qidi3d.com](https://eu.qidi3d.com/pages/qidi-q2c-faq)<br>[au.qidi3d.com](https://au.qidi3d.com/pages/qidi-q2c-techspecs) |
+| Qidi X-Max 3 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [QIDITECH/QIDI_MAX3](https://github.com/QIDITECH/QIDI_MAX3)<br>[QIDITECH/moonraker](https://github.com/QIDITECH/moonraker) |
+| Qidi X-Max 4 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [QIDITECH/moonraker](https://github.com/QIDITECH/moonraker)<br>[QIDITECH/QIDI_PLUS4](https://github.com/QIDITECH/QIDI_PLUS4) |
+| Qidi X-Plus 3 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [QIDITECH/moonraker](https://github.com/QIDITECH/moonraker)<br>[Phil1988/FreeQIDI](https://github.com/Phil1988/FreeQIDI) |
+| Qidi X-Plus 4 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [QIDITECH/QIDI_PLUS4](https://github.com/QIDITECH/QIDI_PLUS4)<br>[Phil1988/FreeDi](https://github.com/Phil1988/FreeDi) |
+| Qidi X-Plus 5 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.qidi3d.com](https://wiki.qidi3d.com/en/Plus5/intro-Plus5)<br>[all3dp.com](https://all3dp.com/4/qidis-new-plus5-brings-an-18-bigger-bed-for-749-handles-up-to-16-spools/) |
+| Qidi X-Smart 3 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [QIDITECH/moonraker](https://github.com/QIDITECH/moonraker)<br>[Phil1988/FreeQIDI](https://github.com/Phil1988/FreeQIDI) |
 
 ## RatRig { #vendor-ratrig }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| RatRig V-Cast | 0.4, 0.6 |
-| RatRig V-Core 3 200 | 0.4 |
-| RatRig V-Core 3 300 | 0.4 |
-| RatRig V-Core 3 400 | 0.4 |
-| RatRig V-Core 3 500 | 0.4 |
-| RatRig V-Core 4 300 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 400 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 500 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 HYBRID 300 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 HYBRID 400 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 HYBRID 500 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 300 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 300 COPY MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 300 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 400 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 400 COPY MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 400 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 500 | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 500 COPY MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Core 4 IDEX 500 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 |
-| RatRig V-Minion | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| RatRig V-Cast | 0.4, 0.6 | Klipper im Selbstbau | – | mittel | [printago.io](https://printago.io/printers/ratrig-v-cast)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
+| RatRig V-Core 3 200 | 0.4 | Klipper im Selbstbau | – | hoch | [v-core.ratrig.com](https://v-core.ratrig.com/firmware/)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
+| RatRig V-Core 3 300 | 0.4 | Klipper im Selbstbau | – | hoch | [v-core.ratrig.com](https://v-core.ratrig.com/firmware/)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
+| RatRig V-Core 3 400 | 0.4 | Klipper im Selbstbau | – | hoch | [v-core.ratrig.com](https://v-core.ratrig.com/firmware/)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
+| RatRig V-Core 3 500 | 0.4 | Klipper im Selbstbau | – | hoch | [v-core.ratrig.com](https://v-core.ratrig.com/firmware/)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
+| RatRig V-Core 4 300 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction)<br>[simplyprint.io](https://simplyprint.io/setup-guide/rat-rig/v-core-4-0-400mm) |
+| RatRig V-Core 4 400 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction)<br>[simplyprint.io](https://simplyprint.io/setup-guide/rat-rig/v-core-4-0-400mm) |
+| RatRig V-Core 4 500 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction)<br>[simplyprint.io](https://simplyprint.io/setup-guide/rat-rig/v-core-4-0-500mm) |
+| RatRig V-Core 4 HYBRID 300 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 HYBRID 400 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 HYBRID 500 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 300 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 300 COPY MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 300 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 400 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 400 COPY MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 400 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 500 | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 500 COPY MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Core 4 IDEX 500 MIRROR MODE | 0.4, 0.5, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [os.ratrig.com](https://os.ratrig.com/docs/2.0.x/introduction) |
+| RatRig V-Minion | 0.4 | Klipper im Selbstbau | – | hoch | [docs.ratrig.com](https://docs.ratrig.com/product-details/v-minion-1-0)<br>[os.ratrig.com](https://os.ratrig.com/docs/introduction/) |
 
 ## re3D { #vendor-re3d }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| re3D Gigabot 4 | 0.4, 0.8 |
-| re3D Gigabot 4 XLT | 0.4, 0.8 |
-| re3D GigabotX 2 | 0.8, 1.75 |
-| re3D GigabotX 2 XLT | 0.8, 1.75 |
-| re3D Terabot 4 | 0.4, 0.8 |
-| re3D TerabotX 2 | 0.8, 1.75 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| re3D Gigabot 4 | 0.4, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/)<br>[re3d.org](https://re3d.org/gigabotx/) |
+| re3D Gigabot 4 XLT | 0.4, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/) |
+| re3D GigabotX 2 | 0.8, 1.75 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/)<br>[printago.io](https://printago.io/printers/re3d-gigabotx-2) |
+| re3D GigabotX 2 XLT | 0.8, 1.75 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/) |
+| re3D Terabot 4 | 0.4, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/) |
+| re3D TerabotX 2 | 0.8, 1.75 | Klipper + Moonraker (ab Werk) | – | mittel | [facfox.com](https://facfox.com/news/re3d-launches-gigabot-4-terabot-4-gigabotx-2-and-terabotx-2-3d-printer-hardware/) |
 
 ## RH3D { #vendor-rh3d }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| E3NG v1.2S | 0.2, 0.3, 0.4, 0.5, 0.6 |
-| VIRTU E3 | 0.2, 0.3, 0.4, 0.5, 0.6 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| E3NG v1.2S | 0.2, 0.3, 0.4, 0.5, 0.6 | Klipper im Selbstbau | – | mittel | [emna2881/E3NG-Toolchanger](https://github.com/emna2881/E3NG-Toolchanger)<br>[HeavilyModdedEnder3/E3NG-x-Monolith](https://github.com/HeavilyModdedEnder3/E3NG-x-Monolith)<br>[printago.io](https://printago.io/printers/rh3d-e3ng-v12s) |
+| VIRTU E3 | 0.2, 0.3, 0.4, 0.5, 0.6 | Klipper im Selbstbau | – | niedrig | [OrcaSlicer/OrcaSlicer](https://github.com/OrcaSlicer/OrcaSlicer/pull/14707)<br>[printago.io](https://printago.io/printers/rh3d-virtu-e3) |
 
 ## RolohaunDesign { #vendor-rolohaundesign }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Rolohaun Delta Flyer Refit | 0.4 |
-| Rook MK1 LDO | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Rolohaun Delta Flyer Refit | 0.4 | Klipper im Selbstbau | – | hoch | [store.dremc.com.au](https://store.dremc.com.au/products/ldo-rolohaun-delta-flyer-diy-3d-printer-kit)<br>[fabreeko.com](https://www.fabreeko.com/products/delta-flyer-kit-by-ldo) |
+| Rook MK1 LDO | 0.2, 0.4, 0.6, 0.8 | Klipper im Selbstbau | – | hoch | [west3d.com](https://west3d.com/products/rook-mk1-3d-printer-kit-by-rolohaun-1)<br>[fabreeko.com](https://fabreeko.com/products/rook-mk1-3d-printer-by-ldo-motors) |
 
 ## SecKit { #vendor-seckit }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Seckit Go3 | 0.4 |
-| SecKit SK-Tank | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Seckit Go3 | 0.4 | Klipper im Selbstbau | – | mittel | [printago.io](https://printago.io/printers/seckit-go3) |
+| SecKit SK-Tank | 0.4 | Klipper im Selbstbau | – | mittel | [printago.io](https://printago.io/printers/seckit-sk-tank)<br>[printables.com](https://www.printables.com/model/142277-sk-tank-cf-bmg-dual-5015s-mount)<br>[SecKit/Breezer](https://github.com/SecKit/Breezer) |
 
 ## Snapmaker { #vendor-snapmaker }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Snapmaker U1 | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Snapmaker U1 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [snapmaker.com](https://www.snapmaker.com/blog/snapmaker-u1-firmware-now-on-github)<br>[Snapmaker/u1-moonraker](https://github.com/Snapmaker/u1-moonraker)<br>[all3dp.com](https://all3dp.com/4/snapmaker-open-sources-its-u1-klipper-code-with-a-day-to-spare/) |
 
 ## Sovol { #vendor-sovol }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Sovol SV06 ACE | 0.2, 0.4, 0.6, 0.8 |
-| Sovol SV06 Plus ACE | 0.4 |
-| Sovol SV07 Plus | 0.4 |
-| Sovol SV08 | 0.2, 0.4, 0.6, 0.8 |
-| Sovol SV08 MAX | 0.4, 0.6, 0.8 |
-| Sovol Zero | 0.2, 0.4, 0.6, 0.8, 1.0 |
-
-## Tiertime { #vendor-tiertime }
-
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Tiertime UP300 HS | 0.4 |
-| Tiertime UP310 Pro | 0.4 |
-| Tiertime UP400 Pro | 0.4, 0.6, 0.8 |
-| Tiertime UP600 HS | 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Sovol SV06 ACE | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [github.com](https://github.com/Sovol3d)<br>[sovol3d.com](https://www.sovol3d.com/) |
+| Sovol SV06 Plus ACE | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [github.com](https://github.com/Sovol3d)<br>[sovol3d.com](https://www.sovol3d.com/) |
+| Sovol SV07 Plus | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [github.com](https://github.com/Sovol3d)<br>[sovol3d.com](https://www.sovol3d.com/) |
+| Sovol SV08 | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [Sovol3d/SV08](https://github.com/Sovol3d/SV08) |
+| Sovol SV08 MAX | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [github.com](https://github.com/Sovol3d)<br>[sovol3d.com](https://www.sovol3d.com/) |
+| Sovol Zero | 0.2, 0.4, 0.6, 0.8, 1.0 | Klipper + Moonraker (ab Werk) | – | mittel | [github.com](https://github.com/Sovol3d)<br>[sovol3d.com](https://www.sovol3d.com/) |
 
 ## TwoTrees { #vendor-twotrees }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| TwoTrees SK1 | 0.4 |
-| TwoTrees SP-5 Klipper | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| TwoTrees SK1 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [tomshardware.com](https://www.tomshardware.com/3d-printing/two-trees-sk1-review)<br>[taoofmac.com](https://taoofmac.com/space/blog/2024/03/02/1900) |
+| TwoTrees SP-5 Klipper | 0.4 | Echtes Klipper per etabliertem Mod | [Klipper3d/klipper](https://github.com/Klipper3d/klipper/blob/master/config/printer-twotrees-sapphire-plus-sp-5-v1.1-2021.cfg) | mittel | [Klipper3d/klipper](https://github.com/Klipper3d/klipper/blob/master/config/printer-twotrees-sapphire-plus-sp-5-v1.1-2021.cfg)<br>[Travis90x/Klipper-config](https://github.com/Travis90x/Klipper-config) |
 
 ## Vivedino { #vendor-vivedino }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Troodon 2.0 - Klipper | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Troodon 2.0 - Klipper | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [tinymachines3d.com](https://www.tinymachines3d.com/products/drop-ship-troodon-2-pro)<br>[simplyprint.io](https://simplyprint.io/setup-guide/vivedino/troodon-2-0/klipper-powered/enable-simplyprint/moonraker) |
 
 ## Volumic { #vendor-volumic }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| EXO42 IDRE | 0.4 |
-| EXO42 Performance | 0.4 |
-| EXO42 Stage 2 | 0.4 |
-| EXO65 IDRE | 0.4 |
-| EXO65 Performance | 0.4, 0.6, 0.8 |
-| EXO65 Stage 2 | 0.6 |
-| SH65 IDRE | 0.4 |
-| SH65 Performance | 0.4 |
-| SH65 Stage 2 | 0.4 |
-| VS30MK3 Stage 2 | 0.4 |
-| VS30SC2 Performance | 0.4 |
-| VS30SC2 Stage 2 | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| EXO42 IDRE | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic)<br>[imprimante-3d-volumic.com](https://imprimante-3d-volumic.com/en/imprimante/exo-42/) |
+| EXO42 Performance | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| EXO42 Stage 2 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| EXO65 IDRE | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| EXO65 Performance | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| EXO65 Stage 2 | 0.6 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| SH65 IDRE | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| SH65 Performance | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| SH65 Stage 2 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic)<br>[3dnatives.com](https://www.3dnatives.com/lab-3dnatives-imprimante-3d-sh65-volumic-15092022) |
+| VS30MK3 Stage 2 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| VS30SC2 Performance | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
+| VS30SC2 Stage 2 | 0.4 | Klipper + Moonraker (ab Werk) | – | hoch | [VOLUMIC/.volumic](https://github.com/VOLUMIC/.volumic) |
 
 ## Voron { #vendor-voron }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Voron 0.1 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron 2.4 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron 2.4 300 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron 2.4 350 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron Switchwire 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron Trident 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron Trident 300 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
-| Voron Trident 350 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Voron 0.1 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/)<br>[VoronDesign/Voron-0](https://github.com/VoronDesign/Voron-0) |
+| Voron 2.4 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
+| Voron 2.4 300 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
+| Voron 2.4 350 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
+| Voron Switchwire 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/)<br>[VoronDesign/Voron-Switchwire](https://github.com/VoronDesign/Voron-Switchwire) |
+| Voron Trident 250 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
+| Voron Trident 300 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
+| Voron Trident 350 | 0.15, 0.2, 0.25, 0.4, 0.5, 0.6, 0.8, 1.0 | Klipper im Selbstbau | – | hoch | [docs.vorondesign.com](https://docs.vorondesign.com/build/software/) |
 
 ## Vzbot { #vendor-vzbot }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Vzbot 235 AWD | 0.4, 0.5, 0.6 |
-| Vzbot 330 AWD | 0.4, 0.5, 0.6 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Vzbot 235 AWD | 0.4, 0.5, 0.6 | Klipper im Selbstbau | – | hoch | [docs.vzbot.org](https://docs.vzbot.org/vz235_printed)<br>[VzBoT3D/VzBoT-Vz235](https://github.com/VzBoT3D/VzBoT-Vz235) |
+| Vzbot 330 AWD | 0.4, 0.5, 0.6 | Klipper im Selbstbau | – | hoch | [docs.vzbot.org](https://docs.vzbot.org/vz330_printed)<br>[VzBoT3D/VzBoT-Vz330](https://github.com/VzBoT3D/VzBoT-Vz330) |
 
 ## Wanhao France { #vendor-wanhao-france }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| D12 230 PRO SMARTPAD DIRECT | 0.4 |
-| D12 230 PRO SMARTPAD MONO DUAL | 0.4 |
-| D12 230 PRO SMARTPAD MONO DUAL PoopTool | 0.4 |
-| D12 300 PRO SMARTPAD DIRECT | 0.4 |
-| D12 300 PRO SMARTPAD MONO DUAL | 0.4 |
-| D12 300 PRO SMARTPAD MONO DUAL PoopTool | 0.4 |
-| D12 500 PRO SMARTPAD DIRECT | 0.4 |
-| D12 500 PRO SMARTPAD MONO DUAL | 0.4 |
-| D12 500 PRO SMARTPAD MONO DUAL PoopTool | 0.4 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| D12 230 PRO SMARTPAD DIRECT | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/)<br>[printago.io](https://printago.io/printers/wanhao-france-d12-230-pro-smartpad-direct) |
+| D12 230 PRO SMARTPAD MONO DUAL | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/) |
+| D12 230 PRO SMARTPAD MONO DUAL PoopTool | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/) |
+| D12 300 PRO SMARTPAD DIRECT | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/) |
+| D12 300 PRO SMARTPAD MONO DUAL | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/) |
+| D12 300 PRO SMARTPAD MONO DUAL PoopTool | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/) |
+| D12 500 PRO SMARTPAD DIRECT | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/)<br>[printago.io](https://printago.io/printers/wanhao-france-d12-500-pro-smartpad-direct) |
+| D12 500 PRO SMARTPAD MONO DUAL | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/)<br>[printago.io](https://printago.io/printers/wanhao-france-d12-500-pro-smartpad-mono-dual) |
+| D12 500 PRO SMARTPAD MONO DUAL PoopTool | 0.4 | Klipper + Moonraker (ab Werk) | – | mittel | [wiki.yumi-lab.com](https://wiki.yumi-lab.com/PRINTERS/WANHAO_D12/)<br>[printago.io](https://printago.io/printers/wanhao-france-d12-500-pro-smartpad-mono-dual-pooptool) |
 
 ## WonderMaker { #vendor-wondermaker }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| WonderMaker ZR | 0.2, 0.4, 0.6, 0.8 |
-| WonderMaker ZR Ultra | 0.2, 0.4, 0.6, 0.8 |
-| WonderMaker ZR Ultra S | 0.2, 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| WonderMaker ZR | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [anselor/Wondermaker_plus](https://github.com/anselor/Wondermaker_plus)<br>[printago.io](https://printago.io/printers/wondermaker-zr) |
+| WonderMaker ZR Ultra | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [anselor/Wondermaker_plus](https://github.com/anselor/Wondermaker_plus)<br>[fabbaloo.com](https://www.fabbaloo.com/news/wondermaker-unveils-zr-ultra-affordable-toolchanging-3d-printer-set-to-disrupt-market)<br>[OrcaSlicer/OrcaSlicer](https://github.com/OrcaSlicer/OrcaSlicer/pull/15226) |
+| WonderMaker ZR Ultra S | 0.2, 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | hoch | [OrcaSlicer/OrcaSlicer](https://github.com/OrcaSlicer/OrcaSlicer/pull/15179)<br>[anselor/Wondermaker_plus](https://github.com/anselor/Wondermaker_plus) |
 
 ## Z-Bolt { #vendor-z-bolt }
 
-| Modell | Düsengrößen (mm) |
-|---|---|
-| Z-Bolt S1000 | 0.4, 0.6, 0.8 |
-| Z-Bolt S1000 Dual | 0.4, 0.6, 0.8 |
-| Z-Bolt S300 | 0.4, 0.6, 0.8 |
-| Z-Bolt S300 Dual | 0.4, 0.6, 0.8 |
-| Z-Bolt S400 | 0.4, 0.6, 0.8 |
-| Z-Bolt S400 Dual | 0.4, 0.6, 0.8 |
-| Z-Bolt S600 | 0.4, 0.6, 0.8 |
-| Z-Bolt S600 Dual | 0.4, 0.6, 0.8 |
-| Z-Bolt S800 Dual | 0.4, 0.6, 0.8 |
+| Modell | Düsen (mm) | Firmware | Mod-Projekt | Sicherheit | Quellen |
+|---|---|---|---|---|---|
+| Z-Bolt S1000 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s1000) |
+| Z-Bolt S1000 Dual | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s1000-dual) |
+| Z-Bolt S300 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s300) |
+| Z-Bolt S300 Dual | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s300-dual) |
+| Z-Bolt S400 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s400) |
+| Z-Bolt S400 Dual | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s400-dual) |
+| Z-Bolt S600 | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s600) |
+| Z-Bolt S600 Dual | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s600-dual) |
+| Z-Bolt S800 Dual | 0.4, 0.6, 0.8 | Klipper + Moonraker (ab Werk) | – | mittel | [habr.com](https://habr.com/en/articles/460453)<br>[printago.io](https://printago.io/printers/z-bolt-s800-dual) |
 
-!!! question "Drucker fehlt?"
-
-    Jeder Klipper-Drucker funktioniert mit dem generischen Profil (**Generic Klipper Printer**, Hersteller *Custom Printer*). Wie man ein Profil ergänzt, steht unter [Mitwirken](contributing.md#printer-profiles).
-
-<small>Erzeugt aus Quell-Commit `274ed47ac5`.</small>
+<small>Erzeugt aus Quell-Commit `d168f5a05d`.</small>

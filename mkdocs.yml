@@ -1,5 +1,8 @@
 site_name: KLIPSLICE Wiki
 site_description: Documentation for KLIPSLICE, an open-source, Klipper-only slicer forked from OrcaSlicer.
+repo_url: https://github.com/Extrutex/KlipSlice
+repo_name: Extrutex/KlipSlice
+edit_uri: ""
 copyright: KLIPSLICE is free software under the GNU AGPL-3.0. Wiki content by the KLIPSLICE contributors.
 
 docs_dir: docs

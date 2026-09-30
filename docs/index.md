@@ -6,23 +6,37 @@ KLIPSLICE is an open-source 3D printing slicer for printers that run
 not lead to a Klipper machine removed, and it talks to printers through one
 interface only: [Moonraker](https://moonraker.readthedocs.io/).
 
+The source code is public at
+[github.com/Extrutex/KlipSlice](https://github.com/Extrutex/KlipSlice).
+
 !!! warning "Pre-alpha"
 
-    There are no release builds and no installers yet. The only way to run
-    KLIPSLICE today is to [build it from source](build.md). Settings, profiles and
-    file formats can still change without migration. Do not rely on it for prints
-    that matter.
+    There are no releases and no installers yet. CI builds KLIPSLICE for
+    Windows, macOS and Linux on every push, but these builds are for testing the
+    build itself; to run KLIPSLICE, [build it from source](build.md). Settings,
+    profiles and file formats can still change without migration. Do not rely on
+    it for prints that matter.
+
+!!! note "Not affiliated with Klipper"
+
+    KLIPSLICE is an independent community project and is not affiliated with or
+    endorsed by the Klipper project.
 
 ## What KLIPSLICE is
 
 Klipper only
-:   Every bundled printer profile targets Klipper. Printers running Marlin,
-    RepRapFirmware or vendor firmware without Klipper were removed from the
-    profile set, and the G-code flavor is locked to `klipper`; older
-    projects and presets with another flavor are converted when they load. The
-    [printer list](printers.md) is generated from the profiles
-    and the generator refuses to list a printer whose G-code flavor is not
-    `klipper`.
+:   System printer profiles ship only for printers that verifiably run real
+    Klipper: from the factory, through an established community mod, or as a
+    self-built machine. The evidence for each model (firmware status, mod
+    project, sources) is listed on the [printer page](printers.md), which is
+    generated from the profiles and the evidence file together. The G-code
+    flavor is locked to `klipper`; older projects and presets with another
+    flavor are converted when they load.
+
+Your own printer is first-class
+:   Self-built and converted machines work without a system profile: start
+    from **Generic Klipper Printer** or use the **Create printer** dialog (see
+    [Your own Klipper printer](printers.md#own-printer)).
 
 Moonraker as the only host
 :   KLIPSLICE uploads G-code and starts prints through Moonraker's HTTP API. It
@@ -77,11 +91,13 @@ other end (see [Vision & roadmap](vision.md)).
 
 | Area | State |
 |---|---|
-| Klipper-only printer profile set | Done. See [Supported printers](printers.md). |
+| Klipper-only printer profile set, with per-model firmware evidence | Done. See [Supported printers](printers.md). |
+| Public source repository | Done: [github.com/Extrutex/KlipSlice](https://github.com/Extrutex/KlipSlice). |
+| CI builds for Windows, macOS and Linux | Running on every push. |
 | Own identity: binaries, app bundle, data directory, installer IDs | Done. KLIPSLICE installs next to OrcaSlicer without touching it. |
 | Removal of the Bambu network plugin and of non-Moonraker print hosts | In progress. Every stored host type is already mapped to Moonraker on load; parts of the inherited code are still in the tree. |
 | OrcaSlicer cloud features (login, preset sync) inherited from upstream | Still present. No decision to remove them yet. |
-| Release builds and installers | None yet. |
+| Releases and installers | None yet (pre-alpha). |
 | Machine sync, Klipper print time, adaptive mesh and purge | Planned. See [Vision & roadmap](vision.md). |
 
 ## Where to go next
