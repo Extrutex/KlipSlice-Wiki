@@ -19,7 +19,7 @@ The source code is public at
 
 !!! note "Not affiliated with Klipper"
 
-    KLIPSLICE is an independent community project and is not affiliated with or
+    KLIPSLICE is an independent project and is not affiliated with or
     endorsed by the Klipper project.
 
 ## What KLIPSLICE is

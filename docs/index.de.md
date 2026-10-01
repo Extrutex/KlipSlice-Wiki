@@ -19,7 +19,7 @@ Der Quellcode ist öffentlich unter
 
 !!! note "Keine Verbindung zu Klipper"
 
-    KLIPSLICE ist ein unabhängiges Community-Projekt. Es steht in keiner
+    KLIPSLICE ist ein unabhängiges Projekt. Es steht in keiner
     Verbindung zum Klipper-Projekt und wird von diesem weder unterstützt noch
     empfohlen.
 
