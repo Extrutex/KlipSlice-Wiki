@@ -1,8 +1,19 @@
 # Contributing
 
-KLIPSLICE is a community project under the AGPL-3.0. Contributions are welcome:
-code, printer profiles, translations, testing on real Klipper machines, and this
-wiki. This page covers the source repository; the wiki has its own
+KLIPSLICE is developed by a single maintainer
+([@Extrutex](https://github.com/Extrutex)). The code is public so that everyone can
+use, read and build it, but KLIPSLICE is not an open-contribution project.
+
+!!! warning "Ask first"
+    Open an issue **before** you write code and describe what you want to change
+    and why. Work starts only after the maintainer has agreed in that issue.
+    Pull requests without prior agreement are closed without review. Bug reports
+    and evidence for printer firmware are always welcome.
+
+Forks are allowed under the AGPL-3.0. A fork is not KLIPSLICE: give it a
+different name and make clear that it is not the official project.
+
+The rest of this page describes how agreed changes are made. The wiki has its own
 [section at the end](#this-wiki).
 
 ## Ground rules
@@ -135,16 +146,18 @@ formats or GUI defaults come with a targeted test or documented verification. Ho
 to build and run the tests is described in
 [Building from source](build.md#running-the-tests).
 
-## CI gates
+## Automatic build checks (CI)
+
+Every push and pull request to `main` or `dev` is built and tested automatically.
 
 | Workflow | Runs on | Checks |
 |---|---|---|
-| `build_all.yml` | Push and pull request to `main` that touch source, deps, CMake, resources, localization or tests; manual dispatch | Linux x86_64 build and unit tests. Windows, macOS, Linux arm64 and Flatpak builds run only on manual dispatch. |
+| `build_all.yml` | Push and pull request to `main`/`dev` that touch source, deps, CMake, resources, localization or tests; manual dispatch | Builds for Linux x86_64, Windows x64 and arm64, macOS arm64 and x86_64 (plus a universal app); unit tests; slice check. Linux arm64 and Flatpak run on manual dispatch. |
 | `check_profiles.yml` | Pull request to `main` that touches profiles, `scripts/` or `PrintConfig.cpp` | Profile tool unit tests, `orca_profile_tool.py check`, system profile validation, slicing with expanded custom G-code, custom preset validation |
 | `check_locale.yml` | Pull request to `main` that touches `localization/` | Translation catalog format |
 | `shellcheck.yml` | Every pull request | ShellCheck on all `*.sh` files and `scripts/linux.d/` |
 
-A pull request is ready when the gates that apply to it are green.
+An agreed pull request is ready when the checks that apply to it are green.
 
 ## This wiki { #this-wiki }
 

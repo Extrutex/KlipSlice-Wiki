@@ -1,9 +1,20 @@
 # Mitwirken
 
-KLIPSLICE ist ein Community-Projekt unter der AGPL-3.0. Beiträge sind willkommen:
-Code, Druckerprofile, Übersetzungen, Tests an echten Klipper-Maschinen und dieses
-Wiki. Diese Seite behandelt das Quell-Repository; zum Wiki selbst gibt es einen
-[Abschnitt am Ende](#this-wiki).
+KLIPSLICE wird von einem einzelnen Maintainer entwickelt
+([@Extrutex](https://github.com/Extrutex)). Der Code ist öffentlich, damit ihn jeder
+nutzen, lesen und bauen kann – KLIPSLICE ist aber kein offenes Mitmach-Projekt.
+
+!!! warning "Erst fragen"
+    Eröffne ein Issue, **bevor** du Code schreibst, und beschreibe, was du ändern
+    willst und warum. Gearbeitet wird erst, wenn der Maintainer im Issue zugestimmt
+    hat. Pull Requests ohne vorherige Zustimmung werden ohne Prüfung geschlossen.
+    Fehlerberichte und Belege zur Drucker-Firmware sind immer willkommen.
+
+Forks sind nach der AGPL-3.0 erlaubt. Ein Fork ist nicht KLIPSLICE: Gib ihm einen
+anderen Namen und mach deutlich, dass er nicht das offizielle Projekt ist.
+
+Der Rest dieser Seite beschreibt, wie abgestimmte Änderungen umgesetzt werden. Zum
+Wiki selbst gibt es einen [Abschnitt am Ende](#this-wiki).
 
 ## Grundregeln
 
@@ -138,16 +149,18 @@ Profilen, Formaten oder GUI-Standardwerten kommen mit einem gezielten Test oder
 einer dokumentierten Prüfung. Wie man die Tests baut und ausführt, steht unter
 [Aus dem Quellcode bauen](build.md#running-the-tests).
 
-## CI-Prüfungen
+## Automatische Build-Prüfungen (CI)
+
+Jeder Push und jeder Pull Request auf `main` oder `dev` wird automatisch gebaut und getestet.
 
 | Workflow | Läuft bei | Prüft |
 |---|---|---|
-| `build_all.yml` | Push und Pull Request auf `main`, die Quellcode, Abhängigkeiten, CMake, Ressourcen, Übersetzungen oder Tests berühren; manueller Start | Linux-x86_64-Build und Unit-Tests. Builds für Windows, macOS, Linux arm64 und Flatpak laufen nur bei manuellem Start. |
-| `check_profiles.yml` | Pull Request auf `main`, der Profile, `scripts/` oder `PrintConfig.cpp` berührt | Unit-Tests des Profil-Werkzeugs, `orca_profile_tool.py check`, Prüfung der Systemprofile, Slicen mit expandiertem Custom-G-Code, Prüfung benutzerdefinierter Presets |
+| `build_all.yml` | Push und Pull Request auf `main`/`dev`, die Quellcode, Abhängigkeiten, CMake, Ressourcen, Übersetzungen oder Tests berühren; manueller Start | Builds für Linux x86_64, Windows x64 und arm64, macOS arm64 und x86_64 (plus Universal-App); Unit-Tests; Slice-Check. Linux arm64 und Flatpak nur per manuellem Start. |
+| `check_profiles.yml` | Pull Request auf `main`, der Profile, `scripts/` oder `PrintConfig.cpp` berührt | Unit-Tests des Profil-Tools, `orca_profile_tool.py check`, Validierung der Systemprofile, Slicen mit expandiertem Custom-G-Code, Validierung benutzerdefinierter Presets |
 | `check_locale.yml` | Pull Request auf `main`, der `localization/` berührt | Format der Übersetzungskataloge |
-| `shellcheck.yml` | Jeder Pull Request | ShellCheck auf alle `*.sh`-Dateien und `scripts/linux.d/` |
+| `shellcheck.yml` | Jeder Pull Request | ShellCheck für alle `*.sh`-Dateien und `scripts/linux.d/` |
 
-Ein Pull Request ist fertig, wenn die für ihn zutreffenden Prüfungen grün sind.
+Ein abgestimmter Pull Request ist bereit, wenn die für ihn geltenden Prüfungen grün sind.
 
 ## Dieses Wiki { #this-wiki }
 
